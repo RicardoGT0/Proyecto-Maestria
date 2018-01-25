@@ -15,3 +15,17 @@ class Nodo:
     def siguiente_nodo(self,siguiente):
         self.__siguiente.append(siguiente)
 
+    def getDispositivo(self):
+        return self.__dispositivo
+
+    def getAccion(self):
+        return self.__accion
+
+    def getTiempo(self):
+        return self.__tiempo
+
+    def getColocacion(self):
+        return self.__colocacion
+
+    def getCuenta(self):
+        return self.__cuenta
