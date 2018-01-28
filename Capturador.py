@@ -17,7 +17,6 @@ def escribir(dispositivo, accion, t_final, colocacion):
 def on_move(x, y):
     colocacion = ('{0},{1}'.format(x, y))
     escribir("Mouse","Moved",time(),colocacion)
-    print(colocacion)
 
 def on_click(x, y, button, pressed):
     accion="{0}".format('Pressed' if pressed else 'Released')
