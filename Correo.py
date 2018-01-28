@@ -6,7 +6,7 @@ from email import encoders
 import os,sys
 
 
-def correo():
+def enviar_correo():
     from_address = "thunder007.25@gmail.com"
     to_address = "thunder007.25@gmail.com"
     message = "Mensaje ennviado de " + sys.platform + "\n" + str(sys.getwindowsversion())
