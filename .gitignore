@@ -99,3 +99,4 @@ ENV/
 .mypy_cache/
 *.txt
 test.py
+prueba.txt
