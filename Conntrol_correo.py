@@ -2,14 +2,14 @@ import datetime
 
 def actualizar_mes():
     fecha=datetime.datetime.now()
-    n_archivo="log.txt"
+    n_archivo="C:\Capturador\log.txt"
     archivo=open(n_archivo,"w")
     archivo.write(str(fecha.month))
     archivo.close()
 
 def enviar():
     try:
-        n_archivo="log.txt"
+        n_archivo="C:\Capturador\log.txt"
         archivo=open(n_archivo,"r")
         linea=archivo.readline()
         archivo.close()
