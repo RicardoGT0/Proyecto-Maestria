@@ -29,3 +29,6 @@ class Nodo:
 
     def getCuenta(self):
         return self.__cuenta
+
+    def setTiempo(self,tiempo):
+        self.__tiempo=tiempo

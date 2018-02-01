@@ -18,6 +18,10 @@ def crear_rama(linea, n_actual, d_nodos):
     id_nodo = str(accion) + str(colocacion)
     if id_nodo in d_nodos:  # busqueda de nodo existente
         n_existente = d_nodos[id_nodo]
+        t_registrado=n_existente.getTiempo()
+        t_actual=n_nuevo.getTiempo()
+        if t_actual>t_registrado:
+            n_existente.setTiempo(t_actual)
         n_actual.siguiente_nodo(n_existente)  # enlace de nodo existete
         n_actual = n_existente
 
@@ -66,5 +70,5 @@ def main():
     for s in l_secuencias:
         print(s)
     """
-#TODO: actualizar el tiempo del nodoen el diccionario al mayor tiempo registrado
+
 main()
