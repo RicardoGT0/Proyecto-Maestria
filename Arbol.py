@@ -6,7 +6,7 @@ def crear_rama(linea, n_actual, d_nodos):
     linea = linea.split(",")
     dispositivo = linea[0]
     accion = linea[1]
-    tiempo = int(linea[2])
+    tiempo = float(linea[2])
     if len(linea) >= 5:
         colocacion = []
         colocacion.append(int(linea[3]))
@@ -20,7 +20,7 @@ def crear_rama(linea, n_actual, d_nodos):
         n_existente = d_nodos[id_nodo]
         t_registrado=n_existente.getTiempo()
         t_actual=n_nuevo.getTiempo()
-        if t_actual>t_registrado:
+        if t_actual>t_registrado and t_actual<1:
             n_existente.setTiempo(t_actual)
         n_actual.siguiente_nodo(n_existente)  # enlace de nodo existete
         n_actual = n_existente
@@ -41,7 +41,7 @@ def extraccion_secuencia(n_actual):
         conteoMax = n_actual.getCuenta()  # actualizacion del conteoMaximo
 
     # extraccion de la secuencia
-    if ((conteoMax * 0.75) <= n_actual.getCuenta()) and (secuencia.count(n_actual) == 0) and (conteoMax >= 90):
+    if ((conteoMax * 0.75) <= n_actual.getCuenta()) and (secuencia.count(n_actual) == 0) and (conteoMax >= 100):
         secuencia.append(n_actual)
     else:
         if not (secuencia in l_secuencias) and secuencia:
@@ -49,7 +49,7 @@ def extraccion_secuencia(n_actual):
         secuencia = []
 
 def main():
-    nombre_archivo="prueba.txt"
+    nombre_archivo="lista_acciones.txt"
     n_raiz=Nodo(0,0,0,0)    #Creacion del nodo Raiz
     n_actual=n_raiz
     d_nodos={"root":n_raiz}          #creacion de diccionario de nodos
@@ -62,13 +62,19 @@ def main():
 
     archivo = open(nombre_archivo, "r")     #lectura del archivo
     for linea in archivo.readlines():
-        n_actual=crear_rama(linea, n_actual, d_nodos)
+        if len(linea)>2:
+            n_actual=crear_rama(linea, n_actual, d_nodos)
 
     archivo.close()
+
+    #Se confirman la secuencias obtenidas
     """
     print(len(d_nodos))
     for s in l_secuencias:
-        print(s)
+        print (s)
+        for e in s:
+            print (e.getDispositivo()+e.getAccion()+e.getColocacion())
+        print("")
     """
 
 main()
