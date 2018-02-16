@@ -65,9 +65,12 @@ def main():
 
     archivo = open(nombre_archivo, "r")     #lectura del archivo
     for linea in archivo.readlines():
-        if len(linea)>2 and len(linea.split(","))>2:
-            #print(linea)
-            n_actual=crear_rama(linea, n_actual, d_nodos)
+        if linea.count("...")>=1:
+            print (linea.split(" ")[1])
+        else:
+            if len(linea)>2 and len(linea.split(","))>2:
+                #print(linea)
+                n_actual=crear_rama(linea, n_actual, d_nodos)
 
     archivo.close()
 
