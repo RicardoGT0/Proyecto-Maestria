@@ -2,7 +2,7 @@ from time import time
 
 t_inicial=time()
 
-def escribir(dispositivo, accion, t_final, colocacion):
+def escribir_accion(dispositivo, accion, t_final, colocacion):
     global t_inicial
     n_archivo="C:\Capturador\lista_acciones.txt"
     archivo=open(n_archivo,"a")

