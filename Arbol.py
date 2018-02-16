@@ -8,10 +8,13 @@ def crear_rama(linea, n_actual, d_nodos):
     accion = linea[1]
     tiempo = float(linea[2])
     if len(linea) >= 5:
-        colocacion = []
-        colocacion.append(int(linea[3]))
-        colocacion.append(int(linea[4]))
-        colocacion = tuple(colocacion)
+        try:
+            colocacion = []
+            colocacion.append(int(linea[3]))
+            colocacion.append(int(linea[4]))
+            colocacion = tuple(colocacion)
+        except:
+            colocacion = str(',')
     else:
         colocacion = str(linea[3])[:-1]
     n_nuevo = Nodo(dispositivo, accion, tiempo, colocacion)  # creacion del nodo nuevo
@@ -62,19 +65,20 @@ def main():
 
     archivo = open(nombre_archivo, "r")     #lectura del archivo
     for linea in archivo.readlines():
-        if len(linea)>2:
+        if len(linea)>2 and len(linea.split(","))>2:
+            #print(linea)
             n_actual=crear_rama(linea, n_actual, d_nodos)
 
     archivo.close()
 
     #Se confirman la secuencias obtenidas
-    """
+
     print(len(d_nodos))
     for s in l_secuencias:
         print (s)
         for e in s:
             print (e.getDispositivo()+e.getAccion()+e.getColocacion())
         print("")
-    """
+
 
 main()
