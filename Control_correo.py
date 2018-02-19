@@ -27,7 +27,6 @@ def enviar():
             return True
 
     except:
-        print(Exception.with_traceback())
         actualizar_dia()
         return False
 
