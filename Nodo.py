@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 class Nodo:
-    def __init__(self, dispositivo, accion, tiempo, colocacion):
-        self.__dispositivo=dispositivo
-        self.__accion=accion
+    def __init__(self, tiempo, informacion):
+        self.__informacion = informacion
         self.__tiempo=tiempo
-        self.__colocacion=colocacion
         self.__siguiente=[]
         self.__cuenta=0
 
@@ -15,20 +13,14 @@ class Nodo:
     def siguiente_nodo(self,siguiente):
         self.__siguiente.append(siguiente)
 
-    def getDispositivo(self):
-        return self.__dispositivo
+    def getCuenta(self):
+        return self.__cuenta
 
-    def getAccion(self):
-        return self.__accion
+    def getInformacion(self):
+        return self.__informacion
 
     def getTiempo(self):
         return self.__tiempo
-
-    def getColocacion(self):
-        return self.__colocacion
-
-    def getCuenta(self):
-        return self.__cuenta
 
     def setTiempo(self,tiempo):
         self.__tiempo=tiempo

