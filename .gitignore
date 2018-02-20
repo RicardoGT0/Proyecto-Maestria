@@ -101,3 +101,4 @@ ENV/
 *.txt
 test.py
 prueba.txt
+*.xml
