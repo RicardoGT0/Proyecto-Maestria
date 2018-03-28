@@ -35,7 +35,7 @@ def extraccion_secuencia(n_actual):
         conteoMax = n_actual.getCuenta()  # actualizacion del conteoMaximo
 
     # extraccion de la secuencia
-    if ((conteoMax * 0.7) <= n_actual.getCuenta()) and (secuencia.count(n_actual) == 0) and (conteoMax >= 100):
+    if ((100 * 0.7) <= n_actual.getCuenta()) and (secuencia.count(n_actual) == 0) and (conteoMax >= 100):
         secuencia.append(n_actual)
     else:
         if not (secuencia in l_secuencias) and secuencia:
@@ -54,11 +54,14 @@ def main():
     conteoMax=0     #la mayor cantidad de veces que se ha visitado un
     global l_secuencias
     l_secuencias=[]
+    t_uso=0
 
     archivo = open(nombre_archivo, "r")     #lectura del archivo
+    #print(len(archivo.readlines()))
     for linea in archivo.readlines():
         if linea.count("...")>=1:
-            print (linea.split(" ")[1])
+            #print (linea.split(" ")[1])
+            t_uso+=float(linea.split(" ")[1])
         else:
             if len(linea)>2 and len(linea.split(","))>2:
                 #print(linea)
@@ -67,13 +70,17 @@ def main():
     archivo.close()
 
     #Se confirman la secuencias obtenidas
-
-    print(len(d_nodos))
+    print("tiempo de uso = ", t_uso)
+    print("numero de nodos = ", len(d_nodos))
+    print("ConteoMax = ", conteoMax)
+    print("Numero de secuencias = ", len(l_secuencias))
+    print("Lista de Nodos: \n")
     #print(d_nodos)
     for s in l_secuencias:
         print (s)
         for e in s:
             print (e.getInformacion())
+            print(e.getCuenta())
         print("")
 
 
