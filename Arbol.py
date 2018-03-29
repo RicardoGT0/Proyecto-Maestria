@@ -19,7 +19,7 @@ def crear_rama(linea, n_actual, d_nodos):
         n_actual.siguiente_nodo(n_existente)  # enlace de nodo existete
         n_actual = n_existente
 
-        extraccion_secuencia(n_actual)
+        n_actual=extraccion_secuencia(n_actual, d_nodos)
     else:
         d_nodos[id_nodo] = n_nuevo
         n_actual.siguiente_nodo(n_nuevo)  # enlace de nodo nuevo
@@ -27,7 +27,7 @@ def crear_rama(linea, n_actual, d_nodos):
     return n_actual
 
 
-def extraccion_secuencia(n_actual):
+def extraccion_secuencia(n_actual,d_nodos):
     global conteoMax, l_secuencias, secuencia
     n_actual.cuenta()  # Al existir el nodo, se lleva un conteo de las veces que ha sido usado
     # print(n_actual.getCuenta())
@@ -38,10 +38,32 @@ def extraccion_secuencia(n_actual):
     if ((100 * 0.7) <= n_actual.getCuenta()) and (secuencia.count(n_actual) == 0) and (conteoMax >= 100):
         secuencia.append(n_actual)
     else:
-        if not (secuencia in l_secuencias) and secuencia:
-            l_secuencias.append(secuencia)
+        if not (tuple(secuencia) in l_secuencias):
+            l_secuencias.append(tuple(secuencia))
+            nodo=Nodo(0.0,tuple(secuencia))
+            d_nodos[tuple(secuencia)]=nodo
+            secuencia = []
+        else:
+            nodo=d_nodos[tuple(secuencia)]
+            nodo.cuenta()
 
-        secuencia = []
+            if ((100 * 0.7) <= nodo.getCuenta()) and len(secuencia)>1:
+                secuencia=[nodo]
+            else:
+                secuencia = []
+            return nodo
+    return n_actual
+
+def excava_nodo(nodo):
+    info=nodo.getInformacion()
+    for i in info:
+        if type(i)==Nodo:
+            print(i.getInformacion())
+            print(i.getCuenta())
+            print("++++++++++++++++++")
+            excava_nodo(i)
+        else:
+            return 0
 
 def main():
     nombre_archivo="lista_acciones.txt"
@@ -77,11 +99,12 @@ def main():
     print("Lista de Nodos: \n")
     #print(d_nodos)
     for s in l_secuencias:
-        print (s)
+        print (list(s))
         for e in s:
-            print (e.getInformacion())
+            print(e.getInformacion())
             print(e.getCuenta())
+            excava_nodo(e)
+            print ("---------")
         print("")
-
 
 main()
