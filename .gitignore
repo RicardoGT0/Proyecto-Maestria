@@ -102,3 +102,5 @@ ENV/
 test.py
 prueba.txt
 *.xml
+test2.py
+conversion.py
