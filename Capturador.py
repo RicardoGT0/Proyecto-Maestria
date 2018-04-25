@@ -1,6 +1,7 @@
-from pynput import mouse,keyboard
+from pynput import mouse, keyboard
 from threading import Thread
-import time
+import time, sys
+from os import remove
 from Nodo import Nodo
 
 n_raiz = Nodo(0, 0)  # Creacion del nodo Raiz
@@ -9,24 +10,24 @@ d_nodos = {"root": n_raiz}  # creacion de diccionario de nodos
 secuencia = []  # Lista con la secuencia de elementos
 conteoMax = 0  # la mayor cantidad de veces que se ha visitado un
 d_secuencias = {}
-l_ignoradas=[]
+l_ignoradas = []
 l_secuencias = []
 t_inicial = time.time()
-lista=[]
+lista = []
 
 
-def crear_rama(linea, n_actual):
-    global conteoMax
-    tiempo  = float(linea[0])
-    informacion=tuple(linea[1:])
+def crear_rama(linea, bandera):
+    global conteoMax, n_actual
+    tiempo = float(linea[0])
+    informacion = tuple(linea[1:])
     n_nuevo = Nodo(tiempo, informacion)  # creacion del nodo nuevo
     id_nodo = informacion
 
     if id_nodo in d_nodos:  # busqueda de nodo existente
         n_existente = d_nodos[id_nodo]
-        t_registrado=n_existente.getTiempo()
-        t_actual=n_nuevo.getTiempo()
-        if t_actual>t_registrado and t_actual<1:
+        t_registrado = n_existente.getTiempo()
+        t_actual = n_nuevo.getTiempo()
+        if t_actual > t_registrado and t_actual < 1:
             n_existente.setTiempo(t_actual)
         n_actual.siguiente_nodo(n_existente)  # enlace de nodo existete
         n_actual = n_existente
@@ -35,26 +36,25 @@ def crear_rama(linea, n_actual):
         if n_actual.getCuenta() >= conteoMax:
             conteoMax = n_actual.getCuenta()  # actualizacion del conteoMaximo
         # extraccion de la secuencia
-        if (conteoMax >= 100):
-           extraccion_secuencia(n_actual)
+        if (conteoMax >= 100 and bandera == 0):
+            extraccion_secuencia()
     else:
         d_nodos[id_nodo] = n_nuevo
         n_actual.siguiente_nodo(n_nuevo)  # enlace de nodo nuevo
         n_actual = n_nuevo
-    return n_actual
 
 
-def extraccion_secuencia(n_actual):
+def extraccion_secuencia():
     global conteoMax, l_secuencias, secuencia, d_secuencias, l_ignoradas
 
-    #print("conteo del nodo: ", n_actual.getCuenta())
-    #print("Conteo Max: ", conteoMax)
+    # print("conteo del nodo: ", n_actual.getCuenta())
+    # print("Conteo Max: ", conteoMax)
 
-    if ((100 * 0.7) < n_actual.getCuenta()) and (not(n_actual in secuencia)):
-        secuencia.append(n_actual)# creacion de la secuencia
+    if ((100 * 0.7) < n_actual.getCuenta()) and (not (n_actual in secuencia)):
+        secuencia.append(n_actual)  # creacion de la secuencia
     else:
-        #Almacenar la secuencia
-        if (not(secuencia in l_secuencias)) and len(secuencia)>1 and (not(secuencia in l_ignoradas)):
+        # Almacenar la secuencia
+        if (not (secuencia in l_secuencias)) and len(secuencia) > 1 and (not (secuencia in l_ignoradas)):
 
             print(secuencia)
             for e in secuencia:
@@ -65,27 +65,104 @@ def extraccion_secuencia(n_actual):
 
             if inp != "i":
                 l_secuencias.append(secuencia)
-                d_secuencias[inp]=secuencia
+                d_secuencias[inp] = secuencia
             else:
                 l_ignoradas.append(secuencia)
         secuencia = []
 
 
-def preprocesamiento():
-    global n_actual, lista
+def carga(nombre_archivo):
+    global l_ignoradas, l_secuencias, d_secuencias
+    archivo = open("C:\Capturador" + nombre_archivo + ".txt", "r")  # lectura del archivo
+    # print(len(archivo.readlines()))
+    llave = ""
+    secuencia = []
+
+    for linea in archivo.readlines():
+        if linea.count("--") >= 1:
+            if nombre_archivo == "\l_secuencias" and len(secuencia) > 0:
+                d_secuencias[llave] = [secuencia]
+                l_secuencias.append(secuencia)
+            if nombre_archivo == "\l_ignoradas" and len(secuencia) > 0:
+                l_ignoradas.append(secuencia)
+
+            llave = linea[3:]
+            secuencia = []
+        else:
+            if len(linea) > 2 and len(linea.split(",")) > 2:
+                if nombre_archivo == "\l_acciones":
+                    linea = linea.split(",")
+                    crear_rama(linea=linea, bandera=1)
+
+                else:
+                    informacion = tuple(linea.split(","))
+                    nodo = d_nodos[informacion]
+                    secuencia.append(nodo)
+    if nombre_archivo == "\l_secuencias" and len(secuencia) > 0:
+        d_secuencias[llave] = secuencia
+        l_secuencias.append(secuencia)
+    if nombre_archivo == "\l_ignoradas" and len(secuencia) > 0:
+        l_ignoradas.append(secuencia)
+
+    archivo.close()
+
+
+def respaldo():
+    while True:
+        time.sleep(10)
+        try:
+            remove("C:\Capturador\l_secuencias.txt")
+        except:
+            pass
+        try:
+            remove("C:\Capturador\l_ignoradas.txt")
+        except:
+            pass
+        llaves = d_secuencias.keys()
+
+        for llave in llaves:
+            print(llave)
+            escribir_accion(["--", llave], "\l_secuencias")
+            secuencia = d_secuencias[llave]
+            print(d_secuencias)
+            for accion in secuencia:
+                escribir_accion(accion.getInformacion(), "\l_secuencias")
+
+        for secuencia in l_ignoradas:
+            print(secuencia)
+            escribir_accion(["--"], "\l_ignoradas")
+            for accion in secuencia:
+                escribir_accion(accion.getInformacion(), "\l_ignoradas")
+        time.sleep(30)
+
+
+def escribir_accion(accion, archivo):
+    # Escribe tuplas o listas en el archivo especificado en un formato de valores separados por comas
+    n_archivo = "C:\Capturador" + archivo + ".txt"
+    archivo = open(n_archivo, "a")
+    cadena = ""
+    for elemento in accion:
+        cadena += str(elemento) + ","
+    archivo.write(cadena[:-1] + "\n")
+    archivo.close()
+
+
+def procesamiento():
+    global lista
     while True:
         print(len(lista))
         for elemento in lista:
-            n_actual=crear_rama(elemento,n_actual)
-        lista=[]
-        time.sleep(30)
+            crear_rama(elemento, 0)
+            escribir_accion(elemento, "\l_acciones")
+        lista = []
+        time.sleep(5)
 
 
 def tiempo(t_final):
     global lista
     global t_inicial
     t_total = round(t_final - t_inicial, 2)
-    t_inicial=time.time()
+    t_inicial = time.time()
     return t_total
 
 
@@ -97,13 +174,13 @@ def on_move(x, y):
 
 def on_click(x, y, button, pressed):
     global lista
-    accion="{0}".format('Pressed' if pressed else 'Released')
+    accion = "{0}".format('Pressed' if pressed else 'Released')
     lista.append((tiempo(time.time()), "Mouse", accion, str(button)))
 
 
 def on_scroll(x, y, dx, dy):
     global lista
-    colocacion=('{0}'.format('Down' if dy < 0 else 'Up'))
+    colocacion = ('{0}'.format('Down' if dy < 0 else 'Up'))
     lista.append((tiempo(time.time()), "Mouse", "Scrolled", colocacion))
 
 
@@ -127,17 +204,32 @@ def on_release(key):
         pass
 
 
-listener_keyboard= keyboard.Listener(
-        on_press=on_press,
-        on_release=on_release)
+try:
+    carga("\l_acciones")
+except:
+    print(sys.exc_info()[1])
+try:
+    carga("\l_secuencias")
+except:
+    print(sys.exc_info()[1])
+try:
+    carga("\l_ignoradas")
+except:
+    print(sys.exc_info()[1])
 
-listener_mouse= mouse.Listener(
-        on_move=on_move,
-        on_click=on_click,
-        on_scroll=on_scroll)
+listener_keyboard = keyboard.Listener(
+    on_press=on_press,
+    on_release=on_release)
 
-p = Thread(target=preprocesamiento)
+listener_mouse = mouse.Listener(
+    on_move=on_move,
+    on_click=on_click,
+    on_scroll=on_scroll)
 
-p.start()
+proc = Thread(target=procesamiento)
+resp = Thread(target=respaldo)
+
+proc.start()
+resp.start()
 listener_keyboard.start()
 listener_mouse.start()
