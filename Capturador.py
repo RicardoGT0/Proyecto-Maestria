@@ -277,7 +277,40 @@ def seleccionar(evt):
 
 
 def ejecutar(): # metodo para ejecutar la secuencia indicada
-    pass
+    d_acciones = {('5',): "5"}
+    k = keyboard.Controller()
+    k.press(keyboard.Key.alt_l)
+    k.press(keyboard.Key.tab)
+    k.release(keyboard.Key.tab)
+    k.release(keyboard.Key.alt_l)
+    time.sleep(2)
+    for nodo in d_secuencias[seleccion]:
+
+        info = nodo.getInformacion()
+        dispositivo = info[0]
+        accion = info[1]
+        disposicion = info[2:]
+
+        if dispositivo == "Keyboard":
+
+            if accion == "Pressed":
+                k.press(d_acciones[disposicion])
+            else:
+                k.release(d_acciones[disposicion])
+        else:
+            m = mouse.Controller()
+            if accion == "Pressed":
+                m.press(d_acciones[disposicion])
+            if accion == "Released":
+                m.release(d_acciones[disposicion])
+            if accion == "Scrolled":
+                if disposicion == "Down\n":
+                    m.scroll(0)
+                else:
+                    m.scroll(1)
+            if accion == "Moved":
+                m.position = disposicion
+
 
 master = Tk()
 listbox1 = Listbox(master)
