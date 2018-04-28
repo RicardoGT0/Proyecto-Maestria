@@ -2,7 +2,10 @@ from pynput import mouse, keyboard
 from threading import Thread
 import time, sys
 from os import remove
+
+
 from Nodo import Nodo
+from tkinter import *
 
 n_raiz = Nodo(0, 0)  # Creacion del nodo Raiz
 n_actual = n_raiz
@@ -44,6 +47,23 @@ def crear_rama(linea, bandera):
         n_actual = n_nuevo
 
 
+class popupWindow(object):
+    def __init__(self,master,cadena):
+        top=self.top=Toplevel(master)
+        self.label1=Label(top,text="Que haces?(i)gnorar  (Escribe el nombre para guardar)")
+        self.label1.pack()
+        self.label2 = Label(top, text=str(cadena))
+        self.label2.pack()
+        self.entry1=Entry(top)
+        self.entry1.pack()
+        self.button=Button(top,text='Guardar',command=self.cleanup)
+        self.button.pack()
+        top.title("Captura de Accion")
+    def cleanup(self):
+        self.value=self.entry1.get()
+        self.top.destroy()
+#https://stackoverflow.com/questions/10020885/creating-a-popup-message-box-with-an-entry-field?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
 def extraccion_secuencia():
     global conteoMax, l_secuencias, secuencia, d_secuencias, l_ignoradas
 
@@ -55,17 +75,22 @@ def extraccion_secuencia():
     else:
         # Almacenar la secuencia
         if (not (secuencia in l_secuencias)) and len(secuencia) > 1 and (not (secuencia in l_ignoradas)):
-
-            print(secuencia)
+            cadena=[]
+            #print(secuencia)
             for e in secuencia:
-                print(e.getInformacion())
+                #print(e.getInformacion())
+                cadena.append(e.getInformacion())
 
-            print("Que haces?(i)gnorar  (Escribe el nombre para guardar)")
-            inp = str(input(">>"))
+            popup = popupWindow(master, cadena)
+            master.wait_window(popup.top)
+
+            #print("Que haces?(i)gnorar  (Escribe el nombre para guardar)")
+            inp = popup.value
 
             if inp != "i":
                 l_secuencias.append(secuencia)
                 d_secuencias[inp] = secuencia
+                listbox1.insert(END, inp)
             else:
                 l_ignoradas.append(secuencia)
         secuencia = []
@@ -81,23 +106,29 @@ def carga(nombre_archivo):
     for linea in archivo.readlines():
         if linea.count("--") >= 1:
             if nombre_archivo == "\l_secuencias" and len(secuencia) > 0:
-                d_secuencias[llave] = [secuencia]
+                d_secuencias[llave] = secuencia
                 l_secuencias.append(secuencia)
+
             if nombre_archivo == "\l_ignoradas" and len(secuencia) > 0:
                 l_ignoradas.append(secuencia)
 
-            llave = linea[3:]
+            llave = linea[3:-1]
             secuencia = []
         else:
             if len(linea) > 2 and len(linea.split(",")) > 2:
                 if nombre_archivo == "\l_acciones":
+                    #crear arbol a partir del respaldo
                     linea = linea.split(",")
+                    linea[-1]=linea[-1][:-1]#eliminar salto de linea de la cadena
                     crear_rama(linea=linea, bandera=1)
 
                 else:
-                    informacion = tuple(linea.split(","))
-                    nodo = d_nodos[informacion]
+                    #crear secuencia a partir del respaldo
+                    informacion = linea.split(",")
+                    informacion[-1]=informacion[-1][:-1]#eliminar salto de linea de la cadena
+                    nodo = d_nodos[tuple(informacion)]
                     secuencia.append(nodo)
+
     if nombre_archivo == "\l_secuencias" and len(secuencia) > 0:
         d_secuencias[llave] = secuencia
         l_secuencias.append(secuencia)
@@ -108,6 +139,7 @@ def carga(nombre_archivo):
 
 
 def respaldo():
+
     while True:
         time.sleep(10)
         try:
@@ -119,17 +151,16 @@ def respaldo():
         except:
             pass
         llaves = d_secuencias.keys()
-
+        print("ejecutando Respaldo", "\l_secuencias")
         for llave in llaves:
-            print(llave)
             escribir_accion(["--", llave], "\l_secuencias")
             secuencia = d_secuencias[llave]
-            print(d_secuencias)
+            #print(llave, secuencia)
             for accion in secuencia:
                 escribir_accion(accion.getInformacion(), "\l_secuencias")
-
+        print("ejecutando Respaldo", "\l_ignoradas")
         for secuencia in l_ignoradas:
-            print(secuencia)
+            #print(secuencia)
             escribir_accion(["--"], "\l_ignoradas")
             for accion in secuencia:
                 escribir_accion(accion.getInformacion(), "\l_ignoradas")
@@ -150,10 +181,10 @@ def escribir_accion(accion, archivo):
 def procesamiento():
     global lista
     while True:
-        print(len(lista))
+        #print(len(lista))
         for elemento in lista:
             crear_rama(elemento, 0)
-            escribir_accion(elemento, "\l_acciones")
+            escribir_accion(elemento, "\l_acciones") #respaldo de la accion
         lista = []
         time.sleep(5)
 
@@ -203,16 +234,19 @@ def on_release(key):
     except TypeError:
         pass
 
-
+#Carga de respaldo en disco
 try:
+    print("carga", "\l_acciones")
     carga("\l_acciones")
 except:
     print(sys.exc_info()[1])
 try:
+    print("carga","\l_secuencias")
     carga("\l_secuencias")
 except:
     print(sys.exc_info()[1])
 try:
+    print("carga","\l_ignoradas")
     carga("\l_ignoradas")
 except:
     print(sys.exc_info()[1])
@@ -226,10 +260,34 @@ listener_mouse = mouse.Listener(
     on_click=on_click,
     on_scroll=on_scroll)
 
-proc = Thread(target=procesamiento)
-resp = Thread(target=respaldo)
+proc = Thread(target=procesamiento) #creacion del arbol en memoria
+resp = Thread(target=respaldo) #creacion del respaldo
 
+# inicio de los Hilos
 proc.start()
 resp.start()
 listener_keyboard.start()
 listener_mouse.start()
+
+#--------Interfaz grafica
+seleccion=""
+def seleccionar(evt):
+    global seleccion
+    seleccion=listbox1.get(listbox1.curselection())
+
+
+def ejecutar(): # metodo para ejecutar la secuencia indicada
+    pass
+
+master = Tk()
+listbox1 = Listbox(master)
+listbox1.get(ACTIVE)
+listbox1.bind('<<ListboxSelect>>',seleccionar)
+listbox1.pack()
+for item in d_secuencias.keys():
+    listbox1.insert(END, item)
+boton=Button(master,text="Ejecutar Accion", command=ejecutar)
+boton.pack()
+master.title("Lista de Acciones")
+
+master.mainloop()
