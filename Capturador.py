@@ -277,22 +277,58 @@ def seleccionar(evt):
 
 
 def ejecutar(): # metodo para ejecutar la secuencia indicada
-    d_acciones = {('5',): "5"}
+    d_acciones = {('1',): "1", ('2',): "2", ('3',): "3", ('4',): "4", ('5',): "5", ('6',): "6",
+                  ('7',): "7", ('8',): "8", ('9',): "9", ('0',): "0", ('a',): "a", ('b',): "b",
+                  ('c',): "c", ('d',): "d", ('e',): "e", ('f',): "f", ('g',): "g", ('h',): "h",
+                  ('i',): "i", ('j',): "j", ('k',): "k", ('l',): "l", ('m',): "m", ('n',): "n",
+                  ('ñ',): "ñ", ('o',): "o", ('p',): "p", ('q',): "q", ('r',): "r", ('s',): "s",
+                  ('t',): "t", ('u',): "u", ('v',): "v", ('w',): "w", ('x',): "x", ('y',): "y",
+                  ('z',): "z", ('A',): "A", ('B',): "B", ('C',): "C", ('D',): "D", ('E',): "E",
+                  ('F',): "F", ('G',): "G", ('H',): "H", ('I',): "I", ('J',): "J", ('K',): "K",
+                  ('L',): "L", ('M',): "M", ('N',): "N", ('Ñ',): "Ñ", ('O',): "O", ('P',): "P",
+                  ('Q',): "Q", ('R',): "R", ('S',): "S", ('T',): "T", ('U',): "U", ('V',): "V",
+                  ('W',): "W", ('X',): "X", ('Y',): "Y", ('Z',): "Z", ('.',): ".", (':',): ":",
+                  (',',): ",", (';',): ";", ('-',): "-", ('_',): "_", ('<',): "<", ('>',): ">",
+                  ('{',): "{", ('[',): "[", ('^',): "^", ('}',): "}", (']',): "]", ('`',): "`",
+                  ('´',): "´", ('¨',): "¨", ('+',): "+", ('*',): "*", ('~',): "~", ('|',): "|",
+                  ('°',): "°", ('¬',): "¬", ('!',): "!", ('"',): '"', ('#',): "#", ('$',): "$",
+                  ('%',): "%", ('&',): "&", ('/',): "/", ('(',): "(", (')',): ")", ('=',): "=",
+                  ("'",): "'", ('?',): "?", ('\\',): "\\", ('¿',): "¿", ('¡',): "¡", ('Key.ctrl_l',): keyboard.Key.ctrl_l,
+                  ('Key.alt_l',): keyboard.Key.alt_l, ('Key.alt_r',): keyboard.Key.alt_r,
+                  ('Key.ctrl_r',): keyboard.Key.ctrl_r, ('Key.left',): keyboard.Key.left,
+                  ('Key.down',): keyboard.Key.down, ('Key.up',): keyboard.Key.up,
+                  ('Key.right',): keyboard.Key.right, ('Key.shift_r',): keyboard.Key.shift_r,
+                  ('Key.shift',): keyboard.Key.shift, ('Key.caps_lock',): keyboard.Key.caps_lock,
+                  ('Key.enter',): keyboard.Key.enter, ('Key.tab',): keyboard.Key.tab,
+                  ('Key.backspace',): keyboard.Key.backspace, ('Key.print_screen',): keyboard.Key.print_screen,
+                  ('Key.delete',): keyboard.Key.delete, ('Key.insert',): keyboard.Key.insert,
+                  ('Key.esc',): keyboard.Key.esc, ('Key.f1',): keyboard.Key.f1, ('Key.f2',): keyboard.Key.f2,
+                  ('Key.f3',): keyboard.Key.f3,('Key.f4',): keyboard.Key.f4,('Key.f5',): keyboard.Key.f5,
+                  ('Key.f6',): keyboard.Key.f6,('Key.f7',): keyboard.Key.f7,('Key.f8',): keyboard.Key.f8,
+                  ('Key.f9',): keyboard.Key.f9,('Key.f10',): keyboard.Key.f10,('Key.f11',): keyboard.Key.f11,
+                  ('Key.f12',): keyboard.Key.f12,('Key.num_lock',): keyboard.Key.num_lock,
+                  ('Key.end',): keyboard.Key.end,('Key.home',): keyboard.Key.home,
+                  ('Key.page_down',): keyboard.Key.page_down,('Key.page_up',): keyboard.Key.page_up,
+                  ('Key.pause',): keyboard.Key.pause,('Key.space',): keyboard.Key.space,
+                  ('Key.scroll_lock',): keyboard.Key.scroll_lock, ('Key.menu',): keyboard.Key.menu,
+                  ('Key.cmd',): keyboard.Key.cmd, ('Key.alt_gr',): keyboard.Key.alt_gr,
+                  ('Button.left',): mouse.Button.left, ('Button.right',): mouse.Button.right,
+                  ('Button.middle',): mouse.Button.middle}
+    #print("Total de acciones: ",len(d_acciones))
     k = keyboard.Controller()
     k.press(keyboard.Key.alt_l)
     k.press(keyboard.Key.tab)
     k.release(keyboard.Key.tab)
     k.release(keyboard.Key.alt_l)
-    time.sleep(2)
+    time.sleep(.5)
     for nodo in d_secuencias[seleccion]:
-
+        espera=nodo.getTiempo()
         info = nodo.getInformacion()
         dispositivo = info[0]
         accion = info[1]
         disposicion = info[2:]
-
+        time.sleep(espera)
         if dispositivo == "Keyboard":
-
             if accion == "Pressed":
                 k.press(d_acciones[disposicion])
             else:
@@ -310,6 +346,10 @@ def ejecutar(): # metodo para ejecutar la secuencia indicada
                     m.scroll(1)
             if accion == "Moved":
                 m.position = disposicion
+    k.press(keyboard.Key.alt_l)
+    k.press(keyboard.Key.tab)
+    k.release(keyboard.Key.tab)
+    k.release(keyboard.Key.alt_l)
 
 
 master = Tk()
