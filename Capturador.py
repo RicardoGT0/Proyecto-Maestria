@@ -2,10 +2,9 @@ from pynput import mouse, keyboard
 from threading import Thread
 import time, sys
 from os import remove
-
-
 from Nodo import Nodo
 from tkinter import *
+from PopupWindow import popupWindow
 
 n_raiz = Nodo(0, 0)  # Creacion del nodo Raiz
 n_actual = n_raiz
@@ -15,6 +14,7 @@ conteoMax = 0  # la mayor cantidad de veces que se ha visitado un
 d_secuencias = {}
 l_ignoradas = []
 l_secuencias = []
+l_conteo=[]
 t_inicial = time.time()
 lista = []
 
@@ -47,25 +47,8 @@ def crear_rama(linea, bandera):
         n_actual = n_nuevo
 
 
-class popupWindow(object):
-    def __init__(self,master,cadena):
-        top=self.top=Toplevel(master)
-        self.label1=Label(top,text="Que haces?(i)gnorar  (Escribe el nombre para guardar)")
-        self.label1.pack()
-        self.label2 = Label(top, text=str(cadena))
-        self.label2.pack()
-        self.entry1=Entry(top)
-        self.entry1.pack()
-        self.button=Button(top,text='Guardar',command=self.cleanup)
-        self.button.pack()
-        top.title("Captura de Accion")
-    def cleanup(self):
-        self.value=self.entry1.get()
-        self.top.destroy()
-#https://stackoverflow.com/questions/10020885/creating-a-popup-message-box-with-an-entry-field?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-
 def extraccion_secuencia():
-    global conteoMax, l_secuencias, secuencia, d_secuencias, l_ignoradas
+    global l_secuencias, secuencia, l_conteo
 
     # print("conteo del nodo: ", n_actual.getCuenta())
     # print("Conteo Max: ", conteoMax)
@@ -74,54 +57,69 @@ def extraccion_secuencia():
         secuencia.append(n_actual)  # creacion de la secuencia
     else:
         # Almacenar la secuencia
-        if (not (secuencia in l_secuencias)) and len(secuencia) > 1 and (not (secuencia in l_ignoradas)):
-            cadena=[]
-            #print(secuencia)
-            for e in secuencia:
-                #print(e.getInformacion())
-                cadena.append(e.getInformacion())
+        if len(secuencia) > 1 and (not (secuencia in l_ignoradas)):
+            # print(secuencia)
 
-            popup = popupWindow(master, cadena)
-            master.wait_window(popup.top)
-
-            #print("Que haces?(i)gnorar  (Escribe el nombre para guardar)")
-            inp = popup.value
-
-            if inp != "i":
-                l_secuencias.append(secuencia)
-                d_secuencias[inp] = secuencia
-                listbox1.insert(END, inp)
+            if (secuencia in l_secuencias):
+                extraccion_tarea()
             else:
-                l_ignoradas.append(secuencia)
+                l_secuencias.append(secuencia)
+                l_conteo.append(0)
         secuencia = []
 
 
+def extraccion_tarea():
+    global l_secuencias, l_conteo, d_secuencias, l_ignoradas
+    i = l_secuencias.index(secuencia)
+    l_conteo[i] += 1
+
+    existe = False  # verifica que la secuencia no este en el diccionario de secuencias,
+    for e in d_secuencias:
+        if secuencia == d_secuencias[e]:
+            existe = True
+
+    if (l_conteo[i] > 5) and (not existe):
+        cadena = []
+        for e in secuencia:
+            cadena.append(e.getInformacion())
+        popup = popupWindow(master, cadena)
+        master.wait_window(popup.top)
+        inp = popup.value
+
+        if inp != "ignorar secuencia":
+            d_secuencias[inp] = secuencia
+            listbox1.insert(END, inp)
+        else:
+            l_ignoradas.append(secuencia)
+            l_secuencias.remove(secuencia)
+
+
 def carga(nombre_archivo):
-    global l_ignoradas, l_secuencias, d_secuencias
-    archivo = open("C:\Capturador" + nombre_archivo + ".txt", "r")  # lectura del archivo
+    global l_ignoradas, l_secuencias, d_secuencias, l_conteo
+    archivo = open(nombre_archivo + ".txt", "r")  # lectura del archivo
     # print(len(archivo.readlines()))
     llave = ""
     secuencia = []
 
     for linea in archivo.readlines():
         if linea.count("--") >= 1:
-            if nombre_archivo == "\l_secuencias" and len(secuencia) > 0:
+            if nombre_archivo == "l_secuencias" and len(secuencia) > 0:
                 d_secuencias[llave] = secuencia
                 l_secuencias.append(secuencia)
+                l_conteo.append(-1)
 
-            if nombre_archivo == "\l_ignoradas" and len(secuencia) > 0:
+            if nombre_archivo == "l_ignoradas" and len(secuencia) > 0:
                 l_ignoradas.append(secuencia)
 
             llave = linea[3:-1]
             secuencia = []
         else:
             if len(linea) > 2 and len(linea.split(",")) > 2:
-                if nombre_archivo == "\l_acciones":
+                if nombre_archivo == "l_acciones":
                     #crear arbol a partir del respaldo
                     linea = linea.split(",")
                     linea[-1]=linea[-1][:-1]#eliminar salto de linea de la cadena
-                    crear_rama(linea=linea, bandera=1)
-
+                    crear_rama(linea=linea, bandera=0)  #Bandera=1 es para no preguntar al cargar el respaldo
                 else:
                     #crear secuencia a partir del respaldo
                     informacion = linea.split(",")
@@ -129,10 +127,10 @@ def carga(nombre_archivo):
                     nodo = d_nodos[tuple(informacion)]
                     secuencia.append(nodo)
 
-    if nombre_archivo == "\l_secuencias" and len(secuencia) > 0:
+    if nombre_archivo == "l_secuencias" and len(secuencia) > 0:
         d_secuencias[llave] = secuencia
         l_secuencias.append(secuencia)
-    if nombre_archivo == "\l_ignoradas" and len(secuencia) > 0:
+    if nombre_archivo == "l_ignoradas" and len(secuencia) > 0:
         l_ignoradas.append(secuencia)
 
     archivo.close()
@@ -143,33 +141,35 @@ def respaldo():
     while True:
         time.sleep(10)
         try:
-            remove("C:\Capturador\l_secuencias.txt")
+            remove("l_secuencias.txt")
         except:
             pass
         try:
-            remove("C:\Capturador\l_ignoradas.txt")
+            remove("l_ignoradas.txt")
         except:
             pass
         llaves = d_secuencias.keys()
-        print("ejecutando Respaldo", "\l_secuencias")
+        print("ejecutando Respaldo", "l_secuencias")
+        print(len(d_secuencias))
         for llave in llaves:
-            escribir_accion(["--", llave], "\l_secuencias")
+            escribir_accion(["--", llave], "l_secuencias")
             secuencia = d_secuencias[llave]
             #print(llave, secuencia)
             for accion in secuencia:
-                escribir_accion(accion.getInformacion(), "\l_secuencias")
-        print("ejecutando Respaldo", "\l_ignoradas")
+                escribir_accion(accion.getInformacion(), "l_secuencias")
+        print("ejecutando Respaldo", "l_ignoradas")
+        print(len(l_ignoradas))
         for secuencia in l_ignoradas:
             #print(secuencia)
-            escribir_accion(["--"], "\l_ignoradas")
+            escribir_accion(["--"], "l_ignoradas")
             for accion in secuencia:
-                escribir_accion(accion.getInformacion(), "\l_ignoradas")
+                escribir_accion(accion.getInformacion(), "l_ignoradas")
         time.sleep(30)
 
 
 def escribir_accion(accion, archivo):
     # Escribe tuplas o listas en el archivo especificado en un formato de valores separados por comas
-    n_archivo = "C:\Capturador" + archivo + ".txt"
+    n_archivo = archivo + ".txt"
     archivo = open(n_archivo, "a")
     cadena = ""
     for elemento in accion:
@@ -184,7 +184,7 @@ def procesamiento():
         #print(len(lista))
         for elemento in lista:
             crear_rama(elemento, 0)
-            escribir_accion(elemento, "\l_acciones") #respaldo de la accion
+            escribir_accion(elemento, "l_acciones") #respaldo de la accion
         lista = []
         time.sleep(5)
 
@@ -234,20 +234,22 @@ def on_release(key):
     except TypeError:
         pass
 
+"""
 #Carga de respaldo en disco
 try:
-    print("carga", "\l_acciones")
-    carga("\l_acciones")
+    print("carga", "l_acciones")
+    carga("l_acciones")
 except:
     print(sys.exc_info()[1])
+
 try:
-    print("carga","\l_secuencias")
+    print("carga","l_secuencias")
     carga("\l_secuencias")
 except:
     print(sys.exc_info()[1])
 try:
-    print("carga","\l_ignoradas")
-    carga("\l_ignoradas")
+    print("carga","l_ignoradas")
+    carga("l_ignoradas")
 except:
     print(sys.exc_info()[1])
 
@@ -268,7 +270,7 @@ proc.start()
 resp.start()
 listener_keyboard.start()
 listener_mouse.start()
-
+"""
 #--------Interfaz grafica
 seleccion=""
 def seleccionar(evt):
@@ -362,5 +364,17 @@ for item in d_secuencias.keys():
 boton=Button(master,text="Ejecutar Accion", command=ejecutar)
 boton.pack()
 master.title("Lista de Acciones")
+
+
+resp = Thread(target=respaldo) #creacion del respaldo
+resp.start()
+
+#Carga de respaldo en disco
+try:
+    print("carga", "l_acciones")
+    carga("l_acciones")
+    print("Datos Cargados")
+except:
+    print(sys.exc_info()[1])
 
 master.mainloop()
