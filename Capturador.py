@@ -5,6 +5,7 @@ from os import remove
 from Nodo import Nodo
 from tkinter import *
 from PopupWindow import popupWindow
+from AnimatedGif import AnimatedGIF
 
 n_raiz = Nodo(0, 0)  # Creacion del nodo Raiz
 n_actual = n_raiz
@@ -69,7 +70,7 @@ def extraccion_secuencia():
 
 
 def extraccion_tarea():
-    global l_secuencias, l_conteo, d_secuencias, l_ignoradas
+    global l_secuencias, l_conteo, d_secuencias, l_ignoradas, gif
     i = l_secuencias.index(secuencia)
     l_conteo[i] += 1
 
@@ -82,6 +83,7 @@ def extraccion_tarea():
         cadena = []
         for e in secuencia:
             cadena.append(e.getInformacion())
+
         popup = popupWindow(master, cadena)
         master.wait_window(popup.top)
         inp = popup.value
@@ -355,16 +357,21 @@ def ejecutar(): # metodo para ejecutar la secuencia indicada
 
 
 master = Tk()
+
+gif = AnimatedGIF(master, "parpadeo.gif")
+gif.pack()
+
 listbox1 = Listbox(master)
 listbox1.get(ACTIVE)
 listbox1.bind('<<ListboxSelect>>',seleccionar)
 listbox1.pack()
+
 for item in d_secuencias.keys():
     listbox1.insert(END, item)
 boton=Button(master,text="Ejecutar Accion", command=ejecutar)
 boton.pack()
-master.title("Lista de Acciones")
 
+master.title("Lista de Acciones")
 
 resp = Thread(target=respaldo) #creacion del respaldo
 resp.start()
