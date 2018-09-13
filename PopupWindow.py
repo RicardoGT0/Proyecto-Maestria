@@ -1,10 +1,13 @@
 from tkinter import *
+from AnimatedGif import AnimatedGIF
 
 class popupWindow(object):
     def __init__(self,master,cadena):
         top=self.top=Toplevel(master)
-        self.label1=Label(top,text="Que haces?(i)gnorar  (Escribe el nombre para guardar)")
+        self.label1=Label(top,text="¿Que haces? \n (Escribe el nombre para guardar)")
         self.label1.pack()
+        self.gif = AnimatedGIF(top, "observando.gif")
+        self.gif.pack()
         self.label2 = Label(top, text=str(cadena))
         self.label2.pack()
         self.entry1=Entry(top)
@@ -19,8 +22,9 @@ class popupWindow(object):
         self.button2.pack()
         top.title("Captura de Accion")
     def cleanup(self):
-        self.value=self.entry1.get()
-        self.top.destroy()
+        if self.entry1.get() != "":
+            self.value=self.entry1.get()
+            self.top.destroy()
     def ignore(self):
         self.value="ignorar secuencia"
         self.top.destroy()
