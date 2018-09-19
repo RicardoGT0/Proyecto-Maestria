@@ -18,7 +18,8 @@ l_secuencias = []
 l_conteo=[]
 t_inicial = time.time()
 lista = []
-
+conteo_tareas=0
+inp=0
 
 def crear_rama(linea, bandera):
     global conteoMax, n_actual
@@ -70,27 +71,37 @@ def extraccion_secuencia():
 
 
 def extraccion_tarea():
-    global l_secuencias, l_conteo, d_secuencias, l_ignoradas, gif
+    global l_secuencias, l_conteo, d_secuencias, l_ignoradas, gif, conteo_tareas, inp
     i = l_secuencias.index(secuencia)
     l_conteo[i] += 1
+    if conteo_tareas < l_conteo[i]:
+        conteo_tareas=l_conteo[i]
 
     existe = False  # verifica que la secuencia no este en el diccionario de secuencias,
     for e in d_secuencias:
         if secuencia == d_secuencias[e]:
             existe = True
 
-    if (l_conteo[i] > 5) and (not existe):
+    if (l_conteo[i] > 5) and (not existe): #and (conteo_tareas>=100):
+        #print(conteo_tareas)
+
         cadena = []
         for e in secuencia:
             cadena.append(e.getInformacion())
 
-        popup = popupWindow(master, cadena)
-        master.wait_window(popup.top)
-        inp = popup.value
+        #popup = popupWindow(master, cadena)
+        #master.wait_window(popup.top)
+        #inp = popup.value
 
-        if inp != "ignorar secuencia":
+        #if inp != "ignorar secuencia" and not ("Pressed" in cadena[0][1]):
+        #    d_secuencias[inp] = secuencia
+        #    listbox1.insert(END, inp)
+
+
+        if not ("Pressed" in cadena[0][1]):
             d_secuencias[inp] = secuencia
             listbox1.insert(END, inp)
+            inp=inp +1
         else:
             l_ignoradas.append(secuencia)
             l_secuencias.remove(secuencia)
@@ -141,7 +152,7 @@ def carga(nombre_archivo):
 def respaldo():
 
     while True:
-        time.sleep(10)
+        time.sleep(120)
         try:
             remove("l_secuencias.txt")
         except:
@@ -153,6 +164,7 @@ def respaldo():
         llaves = d_secuencias.keys()
         print("ejecutando Respaldo", "l_secuencias")
         print(len(d_secuencias))
+        escribir_accion([str(len(d_secuencias))], "l_secuencias")
         for llave in llaves:
             escribir_accion(["--", llave], "l_secuencias")
             secuencia = d_secuencias[llave]
@@ -161,11 +173,13 @@ def respaldo():
                 escribir_accion(accion.getInformacion(), "l_secuencias")
         print("ejecutando Respaldo", "l_ignoradas")
         print(len(l_ignoradas))
+        escribir_accion([str(len(l_ignoradas))], "l_ignoradas")
         for secuencia in l_ignoradas:
             #print(secuencia)
             escribir_accion(["--"], "l_ignoradas")
             for accion in secuencia:
                 escribir_accion(accion.getInformacion(), "l_ignoradas")
+        print("Fin de respaldo")
         time.sleep(30)
 
 
@@ -358,7 +372,7 @@ def ejecutar(): # metodo para ejecutar la secuencia indicada
 
 master = Tk()
 
-gif = AnimatedGIF(master, "parpadeo.gif")
+gif = AnimatedGIF(master, "Alegre2.gif")
 gif.pack()
 
 listbox1 = Listbox(master)
