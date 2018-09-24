@@ -19,7 +19,7 @@ def crear_rama(linea, n_actual, d_nodos):
         n_actual.siguiente_nodo(n_existente)  # enlace de nodo existete
         n_actual = n_existente
 
-        n_actual=extraccion_secuencia(n_actual, d_nodos)
+        #n_actual=extraccion_secuencia(n_actual, d_nodos)
     else:
         d_nodos[id_nodo] = n_nuevo
         n_actual.siguiente_nodo(n_nuevo)  # enlace de nodo nuevo
@@ -66,7 +66,7 @@ def excava_nodo(nodo):
             return 0
 
 def main():
-    nombre_archivo="lista_acciones.txt"
+    nombre_archivo="l_acciones.txt"
     n_raiz=Nodo(0,0)    #Creacion del nodo Raiz
     n_actual=n_raiz
     d_nodos={"root":n_raiz}          #creacion de diccionario de nodos
@@ -92,9 +92,11 @@ def main():
     archivo.close()
 
     #Se confirman la secuencias obtenidas
-    print("tiempo de uso = ", t_uso)
+    print("tiempo de uso = ", t_uso, " hrs")
     print("numero de nodos = ", len(d_nodos))
     print("ConteoMax = ", conteoMax)
+
+"""
     print("Numero de secuencias = ", len(l_secuencias))
     print("Lista de Nodos: \n")
     #print(d_nodos)
@@ -106,5 +108,6 @@ def main():
             excava_nodo(e)
             print ("---------")
         print("")
+"""
 
 main()
