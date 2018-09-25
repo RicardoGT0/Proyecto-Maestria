@@ -59,7 +59,7 @@ def extraccion_secuencia():
         secuencia.append(n_actual)  # creacion de la secuencia
     else:
         # Almacenar la secuencia
-        if len(secuencia) > 1 and (not (secuencia in l_ignoradas)):
+        if len(secuencia)%2 == 0 and (not (secuencia in l_ignoradas)) and len(secuencia) > 1:
             # print(secuencia)
 
             if (secuencia in l_secuencias):
@@ -96,15 +96,28 @@ def extraccion_tarea():
         #if inp != "ignorar secuencia" and not ("Pressed" in cadena[0][1]):
         #    d_secuencias[inp] = secuencia
         #    listbox1.insert(END, inp)
+        #else:
+        #    print("aca")
+        #    l_ignoradas.append(secuencia)
+        #    l_secuencias.remove(secuencia)
 
-
-        if not ("Pressed" in cadena[0][1]):
-            d_secuencias[inp] = secuencia
-            listbox1.insert(END, inp)
-            inp=inp +1
-        else:
+        if "Release" in cadena[0][1]:
             l_ignoradas.append(secuencia)
             l_secuencias.remove(secuencia)
+        else:
+            if "Released" in cadena[0][1]:
+                l_ignoradas.append(secuencia)
+                l_secuencias.remove(secuencia)
+            else:
+                if "Pressed" in cadena[-1][1]:
+                    l_ignoradas.append(secuencia)
+                    l_secuencias.remove(secuencia)
+                else:
+                    d_secuencias[inp] = secuencia
+                    listbox1.insert(END, inp)
+                    inp=inp +1
+
+
 
 
 def carga(nombre_archivo):
@@ -128,12 +141,13 @@ def carga(nombre_archivo):
             secuencia = []
         else:
             if len(linea) > 2 and len(linea.split(",")) > 2:
-                if nombre_archivo == "l_acciones":
+                if nombre_archivo == "compiladoN":
                     #crear arbol a partir del respaldo
                     linea = linea.split(",")
                     linea[-1]=linea[-1][:-1]#eliminar salto de linea de la cadena
                     crear_rama(linea=linea, bandera=0)  #Bandera=1 es para no preguntar al cargar el respaldo
                 else:
+
                     #crear secuencia a partir del respaldo
                     informacion = linea.split(",")
                     informacion[-1]=informacion[-1][:-1]#eliminar salto de linea de la cadena
@@ -200,7 +214,7 @@ def procesamiento():
         #print(len(lista))
         for elemento in lista:
             crear_rama(elemento, 0)
-            escribir_accion(elemento, "l_acciones") #respaldo de la accion
+            escribir_accion(elemento, "compiladoN") #respaldo de la accion
         lista = []
         time.sleep(5)
 
@@ -253,8 +267,8 @@ def on_release(key):
 """
 #Carga de respaldo en disco
 try:
-    print("carga", "l_acciones")
-    carga("l_acciones")
+    print("carga", "compiladoN")
+    carga("compiladoN")
 except:
     print(sys.exc_info()[1])
 
@@ -392,8 +406,8 @@ resp.start()
 
 #Carga de respaldo en disco
 try:
-    print("carga", "l_acciones")
-    carga("l_acciones")
+    print("carga", "compiladoN")
+    carga("compiladoN")
     print("Datos Cargados")
 except:
     print(sys.exc_info()[1])
