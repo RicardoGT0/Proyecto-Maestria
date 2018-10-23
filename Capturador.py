@@ -59,7 +59,7 @@ def extraccion_secuencia():
         secuencia.append(n_actual)  # creacion de la secuencia
     else:
         # Almacenar la secuencia
-        if len(secuencia)%2 == 0 and (not (secuencia in l_ignoradas)) and len(secuencia) > 1:
+        if (not (secuencia in l_ignoradas)) and len(secuencia) > 1:
             # print(secuencia)
 
             if (secuencia in l_secuencias):
@@ -101,23 +101,25 @@ def extraccion_tarea():
         #    l_ignoradas.append(secuencia)
         #    l_secuencias.remove(secuencia)
 
-        if "Release" in cadena[0][1]:
+        if  len(secuencia)%2 != 0:
             l_ignoradas.append(secuencia)
             l_secuencias.remove(secuencia)
         else:
-            if "Released" in cadena[0][1]:
+            if "Release" in cadena[0][1]:
                 l_ignoradas.append(secuencia)
                 l_secuencias.remove(secuencia)
             else:
-                if "Pressed" in cadena[-1][1]:
+                if "Released" in cadena[0][1]:
                     l_ignoradas.append(secuencia)
                     l_secuencias.remove(secuencia)
                 else:
-                    d_secuencias[inp] = secuencia
-                    listbox1.insert(END, inp)
-                    inp=inp +1
-
-
+                    if "Pressed" in cadena[-1][1]:
+                        l_ignoradas.append(secuencia)
+                        l_secuencias.remove(secuencia)
+                    else:
+                        d_secuencias[inp] = secuencia
+                        listbox1.insert(END, inp)
+                        inp=inp +1
 
 
 def carga(nombre_archivo):
