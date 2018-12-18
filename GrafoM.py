@@ -1,9 +1,7 @@
 import time, sys
-from numpy import array
 from Nodo import Nodo
 from Grafo import GraphClass
-
-
+from _graph.GraphPro import GraphPro
 
 
 n_raiz = Nodo(0, 0)  # Creacion del nodo Raiz
@@ -58,12 +56,10 @@ def carga(nombre_archivo):
             linea = linea.split(",")
             linea[-1]=linea[-1][:-1]#eliminar salto de linea de la cadena
 
-            if linea[1] == "Keyboard":
+            if (linea[1] == "Keyboard") and len(d_nodos)<=150:
+            #if (linea[1] == "Mouse") and len(d_nodos) <= 600:
                 crear_rama(linea=linea, bandera=0)  #Bandera=1 es para no preguntar al cargar el respaldo
-
-
     archivo.close()
-
 
 
 #Carga de respaldo en disco
@@ -75,27 +71,17 @@ except:
     print(sys.exc_info()[1])
 
 
-Nodos=list(d_nodos.keys()) #obtengo la lista de nodos por nombre
-
+Nodos=list(d_nodos.keys()) #obteniendo la lista de nodos por nombre
+"""
 # inicializando la matriz de distancias para el grafo
 n=len(Nodos)
 Matriz=[]
 c=0
-
 print("N= ",n)
 for i in range(n):
     Matriz.append([0]*n)
     c+=1
-"""
-#obteniendo la relacion a los nodos ligados al root
-l_siguiente=d_nodos["root"].getSiguiente_nodo()
 
-for e in l_siguiente:
-    i=Nodos.index(e.getInformacion())
-    Matriz[0][i]+=1
-
-
-"""
 #obteniendo relaciones de los demas nodos
 c=0
 for llave in d_nodos:
@@ -103,10 +89,29 @@ for llave in d_nodos:
     l_siguiente=nodo.getSiguiente_nodo()
     for e in l_siguiente:
         i = Nodos.index(e.getInformacion())
-        Matriz[c][i] = 1
+        Matriz[c][i] += 1
     c+=1
 
-
+#usando graphviz
 g=GraphClass(Nodos, Matriz)
-
 g.draw()
+
+
+"""
+sources=[]
+targets=[]
+weights=[]
+#obteniendo relaciones de los demas nodos
+c=0
+for llave in d_nodos:
+    nodo=d_nodos[llave]
+    l_siguiente=nodo.getSiguiente_nodo()
+    for e in l_siguiente:
+        i = Nodos.index(e.getInformacion())
+        sources.append(c)
+        targets.append(i)
+        weights.append(1)
+    c+=1
+
+graph = GraphPro(sources, targets, weights)
+graph.draw()
