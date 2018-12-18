@@ -24,3 +24,6 @@ class Nodo:
 
     def setTiempo(self,tiempo):
         self.__tiempo=tiempo
+
+    def getSiguiente_nodo(self):
+        return self.__siguiente
