@@ -104,3 +104,7 @@ prueba.txt
 *.xml
 test2.py
 conversion.py
+.idea/AI-Python.iml
+.idea/AI-Python.iml
+.idea/misc.xml
+.idea/workspace.xml
