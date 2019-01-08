@@ -10,7 +10,7 @@ class GraphClass:
         self.M=m
         self.distM=dist
 
-    def random(self, s=300):
+    def random(self, s=10):
         a = np.random.uniform(size=s)
         b = np.random.uniform(size=s)
         self.M = np.asmatrix([a, b])
@@ -39,10 +39,8 @@ class GraphClass:
         print(self.distM)
 
     def draw(self):
-
         used = []
-        g = gv.Graph(format="pdf")
-
+        g = gv.Graph(format="eps")
         for i in range(len(self.distM)):
             g.node(str(self.M[i]))
             for j in range(len(self.distM[i])):
@@ -51,5 +49,4 @@ class GraphClass:
                         used.append(str(self.M[i]) + str(self.M[j]))
                         used.append(str(self.M[j]) + str(self.M[i]))
                         g.edge(str(self.M[i]), str(self.M[j]))
-
         g.render(view=True)

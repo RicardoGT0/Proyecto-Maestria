@@ -56,8 +56,8 @@ def carga(nombre_archivo):
             linea = linea.split(",")
             linea[-1]=linea[-1][:-1]#eliminar salto de linea de la cadena
 
-            if (linea[1] == "Keyboard") and len(d_nodos)<=150:
-            #if (linea[1] == "Mouse") and len(d_nodos) <= 600:
+            #if (linea[1] == "Keyboard") and len(d_nodos)<=150:
+            if (linea[1] == "Mouse") and len(d_nodos) <= 600:
                 crear_rama(linea=linea, bandera=0)  #Bandera=1 es para no preguntar al cargar el respaldo
     archivo.close()
 
@@ -72,7 +72,7 @@ except:
 
 
 Nodos=list(d_nodos.keys()) #obteniendo la lista de nodos por nombre
-"""
+
 # inicializando la matriz de distancias para el grafo
 n=len(Nodos)
 Matriz=[]
@@ -115,3 +115,4 @@ for llave in d_nodos:
 
 graph = GraphPro(sources, targets, weights)
 graph.draw()
+"""
