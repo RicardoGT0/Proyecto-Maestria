@@ -1,5 +1,5 @@
 import os
-ruta = "C:\\Users\\pikac\\OneDrive\\Documentos\\GitHub\\AI-Python\\Reportes\\PIKAC completo"
+ruta = "C:\\Users\\pikac\\MEGA\\GitHub\\AI-Python\\Reportes\\Discapacitado"
 
 lista_archivo = os.listdir(ruta)   # no especificar ruta para tomar el directorio actual
 print(lista_archivo)
