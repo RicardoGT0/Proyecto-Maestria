@@ -108,3 +108,5 @@ conversion.py
 .idea/AI-Python.iml
 .idea/misc.xml
 .idea/workspace.xml
+*.gv
+.idea/workspace.xml
