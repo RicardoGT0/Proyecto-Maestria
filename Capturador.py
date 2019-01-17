@@ -21,6 +21,8 @@ lista = []
 conteo_tareas=0
 inp=0
 
+
+
 def crear_rama(linea, bandera):
     global conteoMax, n_actual
     tiempo = float(linea[0])
@@ -41,7 +43,7 @@ def crear_rama(linea, bandera):
         if n_actual.getCuenta() >= conteoMax:
             conteoMax = n_actual.getCuenta()  # actualizacion del conteoMaximo
         # extraccion de la secuencia
-        if (conteoMax >= 100 and bandera == 0):
+        if (conteoMax >= 10 and bandera == 0):
             extraccion_secuencia()
     else:
         d_nodos[id_nodo] = n_nuevo
@@ -82,24 +84,27 @@ def extraccion_tarea():
         if secuencia == d_secuencias[e]:
             existe = True
 
-    if (l_conteo[i] > 5) and (not existe): #and (conteo_tareas>=100):
+    if (l_conteo[i] > 5) and (not existe) : #and (conteo_tareas>=100):
         #print(conteo_tareas)
 
         cadena = []
         for e in secuencia:
             cadena.append(e.getInformacion())
 
-        popup = popupWindow(master, cadena)
-        master.wait_window(popup.top)
-        inp = popup.value
+        if ("Pressed" in cadena[0][1]):
+            popup = popupWindow(master, cadena)
+            master.wait_window(popup.top)
+            inp = popup.value
 
-        if inp != "ignorar secuencia" and not ("Pressed" in cadena[0][1]):
-            d_secuencias[inp] = secuencia
-            listbox1.insert(END, inp)
-        else:
-            print("aca")
-            l_ignoradas.append(secuencia)
-            l_secuencias.remove(secuencia)
+            if inp != "ignorar secuencia":
+                print("aqui")
+                d_secuencias[inp] = secuencia
+                listbox1.insert(END, inp)
+                listbox1.update()
+            else:
+                print("aca")
+                l_ignoradas.append(secuencia)
+                l_secuencias.remove(secuencia)
 """
         if  len(secuencia)%2 != 0:
             l_ignoradas.append(secuencia)
@@ -359,7 +364,7 @@ def ejecutar(): # metodo para ejecutar la secuencia indicada
     k.press(keyboard.Key.tab)
     k.release(keyboard.Key.tab)
     k.release(keyboard.Key.alt_l)
-    time.sleep(.5)
+    time.sleep(0.5)
     for nodo in d_secuencias[seleccion]:
         espera=nodo.getTiempo()
         info = nodo.getInformacion()
