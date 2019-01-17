@@ -20,22 +20,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/GrafoM.py">
+        <entry file="file://$PROJECT_DIR$/Capturador.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="101" column="23" lean-forward="true" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
+            <state relative-caret-position="442">
+              <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
               <folding>
-                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#0#34#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Nodo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -49,15 +40,19 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Capturador.py" />
         <option value="$PROJECT_DIR$/Grafo.py" />
         <option value="$PROJECT_DIR$/Nodo.py" />
         <option value="$PROJECT_DIR$/CompiladoN1.txt" />
         <option value="$PROJECT_DIR$/CompiladoN.txt" />
         <option value="$PROJECT_DIR$/GrafoM.py" />
+        <option value="$PROJECT_DIR$/compilador.py" />
+        <option value="$PROJECT_DIR$/Capturador.py" />
       </list>
     </option>
   </component>
@@ -71,7 +66,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -83,6 +77,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -100,7 +95,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.GrafoM">
+  <component name="RunManager" selected="Python.Capturador">
     <configuration name="Capturador" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="AI-Python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -143,10 +138,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="compilador" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="AI-Python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/compilador.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.GrafoM" />
         <item itemvalue="Python.Capturador" />
+        <item itemvalue="Python.compilador" />
+        <item itemvalue="Python.GrafoM" />
       </list>
     </recent_temporary>
   </component>
@@ -173,9 +190,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24330357" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3329821" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -188,7 +205,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32972974" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.299509" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="10" visible="true" weight="0.4225352" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -202,9 +219,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/compilador.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Reportes/(4) REALIDAD VIRTUAL/compiladoN.txt">
       <provider selected="true" editor-type-id="LargeFileEditor">
         <state>
@@ -212,20 +226,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CompiladoN1.txt" />
-    <entry file="file://$PROJECT_DIR$/CompiladoN.txt">
+    <entry file="file://$PROJECT_DIR$/compiladoN1.txt" />
+    <entry file="file://$PROJECT_DIR$/compiladoN.txt" />
+    <entry file="file://$PROJECT_DIR$/GrafoM.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="19986" column="23" selection-start-line="19986" selection-start-column="23" selection-end-line="19986" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Capturador.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2567">
-          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
+        <state relative-caret-position="271">
+          <caret line="101" column="10" selection-start-line="101" selection-start-column="10" selection-end-line="101" selection-end-column="10" />
           <folding>
-            <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -237,6 +245,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/compilador.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PopupWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="30" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Grafo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -244,12 +269,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GrafoM.py">
+    <entry file="file://$PROJECT_DIR$/Capturador.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="101" column="23" lean-forward="true" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
+        <state relative-caret-position="442">
+          <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
           <folding>
-            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
